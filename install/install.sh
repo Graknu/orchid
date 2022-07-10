@@ -982,7 +982,25 @@ INSTALLER_STEPS="$STR_INSTALLER_STEPS"
 	while [ $test_ip = 0 ]; do
 		echo "$STR_INTERNET_FAIL"
 		read -p "$STR_INTERNET_FAIL_CONTINUE"
-		dhcpcd                                                                              # Génération d'une addresse IP
+		if [ $test_ip = 0 ]
+		then
+			echo "1) static"
+			echo "2) dhcp"
+			read -p "Please select the connecxtion mode" network_config_mode
+			
+			case network_config_mode in
+				1)
+					net-setup	#Static gentoo network config
+					;;
+				2)
+					dhcpcd     	                                                                         # Génération d'une addresse IP
+					;;
+				*)
+					test_ip=0
+					echo "Please select a choice"
+					;;
+			esac
+		fi
 		test_internet_access
 	done
 	echo "$STR_INTERNET_SUCCESS"
